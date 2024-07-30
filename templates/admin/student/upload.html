@@ -1,0 +1,417 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生主页</title>
+    <link href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.js' %}"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .back {
+            background-color: white;
+        }
+
+        .container {
+            border: solid #5c5c9b 10px;
+            width: 100%;
+            height: 1000px;
+            z-index: -1;
+        }
+
+        /* 横向导航条样式 */
+        .navbar {
+            display: flex;
+            background-color: #134081;
+            color: #fff;
+            height: 60px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            border-radius: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        /* 点击按钮后显示纵向导航条 */
+        .sidebar-open .sidebar {
+            left: 0;
+        }
+
+        /* 左侧按钮样式 */
+        .sidebar-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #134081;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .sidebar-btn:before {
+
+        }
+
+        .sidebar-btn:after {
+
+        }
+
+        .sidebar-btn:hover:before,
+        .sidebar-btn:hover:after {
+            transform: scaleY(1.2);
+        }
+
+        /* 纵向导航条样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            padding: 20px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 10px 0;
+
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li a {
+            height: 70px;
+            width: 100%;
+
+        }
+
+        li a:hover {
+
+            background-color: #d3d3d3;
+        }
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        span button {
+            border: none;
+            width: 95px;
+            height: 30px;
+            margin-left: 13px;
+            margin-top: 10px;
+        }
+         li {
+            list-style: none;
+            height: 60px;
+            width: 100%;
+            font-size: 16px;
+        }
+          li {
+            list-style: none;
+            height: 57px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        li li {
+
+            height: 35px;
+
+        }
+
+        li ul li a:hover {
+
+            color: #4c4e52;
+
+        }
+        li a:hover {
+
+            color: #4c4e52;
+
+        }
+        .dropdown-menu {
+            border-radius: 0;
+            width: 230px;
+            height: 110px;
+            border: hidden;
+            box-shadow: none;
+            background-color: #f1f1f1;
+            left: -10px;
+            top: 33px;
+            transition: transform .3s ease-in-out;
+
+        }
+
+        li ul li a {
+            margin-left: 20px;
+            margin-top: 3px;
+        }
+
+        li {
+            transition: transform .3s ease-in-out;
+        }
+
+        li.active ~ li {
+            transform: translateY(90px);
+        }
+    </style>
+</head>
+<body>
+<!-- 横向导航条 -->
+<div class="navbar" style="">
+    <h2>
+        <button class="sidebar-btn"><span style="z-index: 9;color: white;" class="glyphicon glyphicon-th-list"
+                                          aria-hidden="true"></span></button>
+    </h2>
+    <h2 style="margin-right: 1100px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级考试管理系统</h2>
+    <nav>
+
+        <a href="/">注销</a>
+
+    </nav>
+
+</div>
+
+<!-- 纵向导航条 -->
+<div class="sidebar">
+    <br>
+    <br>
+    <br>
+    <div style="height: 210px;">
+<br>
+        <h1><img style="width: 100px;margin-left: 45px;" src="{% static 'img/touxiang.png' %}"></h1>
+        <br>
+<br>
+
+        <div>
+            身份：&nbsp;管理员
+        </div>
+    </div>
+    <hr>
+    <ul>
+
+        <li class="click-slide"><a href="/adminHomepage/">主页</a></li>
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                考试管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a class="" data-toggle="" href="/newClass/">考试类</a></li>
+                <li><a class="" data-toggle="" href="/newBanch/">考试批次</a></li>
+                <li><a class="" data-toggle="" href="/newTest/">考试信息</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                监考管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu " aria-labelledby="dropdownMenu1">
+                <li style="margin-top: 10px;"><a class="" data-toggle="" href="/allTeacher/">查看监考信息</a></li>
+                <br>
+                <li><a class="" data-toggle="" href="/batchTeacher/">分配场次</a></li>
+
+            </ul>
+
+        </li>
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                学生管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu">
+                <li style="margin-top: 10px;"><a class="" data-toggle="" href="/testStudent/">学生报名信息</a></li>
+                <br>
+                <li><a class="" data-toggle="" href="/allStudent/">学生信息</a></li>
+            </ul>
+        </li>
+        <li><a href="/upload/">数据批量导入</a></li>
+        <li><a href="/scoreManage/">成绩管理</a></li>
+        <li><a href="/gradeShow/">成绩统计</a></li>
+
+    </ul>
+    </ul>
+</div>
+
+
+<div class="ibox" style="width: 1300px;margin-left: 100px;">
+    <div class="ibox-title">
+        数据批量导入
+    </div>
+    <div class="ibox-content" style="padding: 30px;height: 600px;">
+        <div class="" style="height: 260px;">
+            <div class="col-sm-4">
+                <div><h5 style="font-weight: bold">1&nbsp;&nbsp;下载导入模板</h5></div>
+                <div>根据需要导入的信息整理模板内容</div>
+{#                <a href="{% static 'modelForm/student.xlsx' %}"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;学生数据导入模板</a><br>#}
+                <a href="{% static 'modelForm/teacher.xlsx' %}"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;监考数据导入模板</a><br>
+                <a href="{% static 'modelForm/score.xlsx' %}"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;成绩数据导入模板</a>
+            </div>
+
+            <div class="col-sm-4">
+                <div><h5 style="font-weight: bold">2&nbsp;&nbsp;上传文件</h5></div>
+                <div>选择需要导入的文件，点击解析文件按钮后，系统会生成解析报告，您可以根据解析失败的原因修正文件内容，然后重新上传</div>
+
+            </div>
+
+            <div class="col-sm-4">
+                <div><h5 style="font-weight: bold">3&nbsp;&nbsp;导入</h5></div>
+                <div>点击导入按钮后，系统将导入数据到数据库</div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-12" style="margin-left: 250px;">
+            <form id="upload-form">
+                <div class="col-sm-3">
+                    <label for="database">请选择要导入的数据库：</label>
+                    <select id="database" name="database">
+{#                        <option value="students">学生库</option>#}
+                        <option value="invigilators">监考库</option>
+                        <option value="scores">成绩库</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <label for="file">请选择要上传的文件：</label>
+                    <input type="file" id="file" name="file">
+                </div>
+                <button type="submit" class="btn btn-primary">上传文件</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+     $('li p').on('click', function () {
+        // 首先将当前元素所在的 li 的兄弟元素中的 active 类清除
+        $(this).parent().siblings().removeClass('active');
+        // 给当前元素所在的 li 添加 active 类
+        $(this).parent().toggleClass('active');
+    });
+    // 给左侧按钮添加点击事件
+    var sidebarBtn = document.querySelector('.sidebar-btn');
+    var sidebar = document.querySelector('.sidebar');
+
+    sidebarBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // 监听文档的click事件，用于在点击页面其他区域时隐藏纵向导航条
+    document.addEventListener('click', function (e) {
+        if (!sidebar.contains(e.target) && !sidebarBtn.contains(e.target)) {
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+
+    $(function () {
+        $('#upload-form').submit(function (event) {
+            event.preventDefault();
+
+            // 获取所选的数据库名和文件
+            var database = $('#database').val();
+            var file = $('#file')[0].files[0];
+
+            // 创建一个 FormData 对象，并将数据库名和文件添加到其中
+            var formData = new FormData();
+            formData.append('database', database);
+            formData.append('file', file);
+
+            // 发送 AJAX 请求，使用 FormData 对象作为请求体
+            $.ajax({
+                url: '/upload/',
+                method: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (data) {
+                    alert(data.message);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseJSON.error);
+                }
+            });
+        });
+    });
+</script>
+</script>
+</body>
+</html>

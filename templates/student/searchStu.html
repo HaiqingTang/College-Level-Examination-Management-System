@@ -1,0 +1,386 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查看考试信息</title>
+    <link href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.js' %}"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            border: solid #5c5c9b 10px;
+            width: 100%;
+            height: 1000px;
+            z-index: -1;
+        }
+
+        /* 横向导航条样式 */
+        .navbar {
+            display: flex;
+            background-color: #134081;
+            color: #fff;
+            height: 60px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            border-radius: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        /* 点击按钮后显示纵向导航条 */
+        .sidebar-open .sidebar {
+            left: 0;
+        }
+
+        /* 左侧按钮样式 */
+        .sidebar-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #134081;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .sidebar-btn:before {
+
+        }
+
+        .sidebar-btn:after {
+
+        }
+
+        .sidebar-btn:hover:before,
+        .sidebar-btn:hover:after {
+            transform: scaleY(1.2);
+        }
+
+        /* 纵向导航条样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            padding: 20px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 10px 0;
+
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li a {
+            height: 70px;
+            width: 100%;
+
+        }
+
+        li a:hover {
+
+            background-color: #d3d3d3;
+        }
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        /* 蒙层样式 */
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            display: none;
+        }
+
+        /* 弹出框样式 */
+        .modal-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 2px;
+            padding: 20px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            display: none;
+
+        }
+
+        /* 关闭按钮样式 */
+        .close-button {
+            position: absolute;
+            bottom: 10px;
+            right: 50px;
+            width: 80px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!-- 横向导航条 -->
+<div class="navbar" style="">
+    <h2>
+        <button class="sidebar-btn"><span style="z-index: 9;color: white;" class="glyphicon glyphicon-th-list"
+                                          aria-hidden="true"></span></button>
+    </h2>
+    <h2 style="margin-right: 1110px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级考试管理系统</h2>
+    <nav>
+
+        <a href="/">注销</a>
+
+    </nav>
+
+</div>
+
+<!-- 纵向导航条 -->
+<div class="sidebar">
+    <br>
+    <br>
+    <br>
+    <div style="height: 220px;">
+
+        <h1><img style="width: 100px;margin-left: 45px;" src="{% static 'img/touxiang.png' %}"></h1>
+        <br>
+        <br>
+        <div>
+            用户名：&nbsp;{{ student.name }}
+
+        </div>
+        <br>
+        <div>
+            身份：&nbsp;{{ identity }}
+        </div>
+    </div>
+    <hr>
+    <ul>
+
+        <li><a href="/">主页</a></li>
+        <li><a href="/regist/">报名入口</a></li>
+        <li><a href="/searchStu/">查看报名</a></li>
+        <li><a href="/grade/">成绩查询</a></li>
+        <li><a href="/dataShow/">报考指导</a></li>
+        <li><a href="/stuinfo/">个人中心</a></li>
+    </ul>
+</div>
+<div class="ibox" style="width: 1400px;margin-left: 50px;">
+    <div class="ibox-title">
+        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp;&nbsp;已报名考次
+    </div>
+    <div class="ibox-content">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>考次</th>
+                <th>考试日期{{ info.date }}</th>
+                <th>姓名</th>
+                <th>学院</th>
+                <th>专业</th>
+
+                <th>操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for info in testList %}
+                <tr>
+                    <td>{{ info.batch }}</td>
+                    <td>{{ info.date }}</td>
+                    <td>{{ info.name }}</td>
+                    <td>{{ info.apartment }}</td>
+                    <td>{{ info.major }}</td>
+
+
+                    <td>
+                        <a href="#" id="popup-link">查看详情</a>
+                    </td>
+
+                </tr>
+                <div class="modal-box">
+                    <h5>查看详情</h5>
+                    <hr>
+                    <div>
+                        <div style="font-weight: bold">考试信息</div>
+                        <br>
+                        <div>
+                            <div class="col-sm-4">考试类型:{{ info.classes }}</div>
+                            <div class="col-sm-4">考次:{{ info.batch }}</div>
+                            <div class="col-sm-4">考试时间:{{ info.date }}</div>
+                        </div>
+                        <br>
+                        <br>
+                        <div style="font-weight: bold">基本信息</div>
+                        <br>
+                        <div>
+                            <div class="col-sm-4">姓名:{{ student.name }}</div>
+                            <div class="col-sm-4">学号:{{ student.sid }}</div>
+                            <div class="col-sm-4">年级:{{ student.grade }}</div>
+                            <br>
+                            <br>
+                            <div class="col-sm-4">学院:{{ student.apartment }}</div>
+                            <div class="col-sm-4">专业:{{ student.major }}</div>
+                            <div class="col-sm-4">班级:{{ student.classes }}</div>
+                            <br>
+                            <br>
+                            <div class="col-sm-4">身份证号:{{ student.id }}</div>
+                            <div class="col-sm-4">学历:{{ student.stage }}</div>
+                            <div class="col-sm-4">手机号:{{ student.phone }}</div>
+                            <br>
+                            <br>
+
+                            <div class="col-sm-4">邮箱:{{ student.email }}</div>
+
+                        </div>
+                        <br>
+                        <br>
+                        <div style="font-weight: bold">其他信息</div>
+                        <br>
+                        {% if info.pay == "1" %}
+                            <div class="col-sm-4">缴费状态：<a style="" class="btn btn-success">已缴费</a></div>
+                        {% elif info.pay == "0" %}
+                            <div class="">缴费状态：&nbsp;&nbsp;&nbsp;<a style="" class="btn btn-danger">未缴费</a>&nbsp;&nbsp;&nbsp;
+                                <a class=" " style="" href="{% url 'dingdan' %}">去支付</a>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                    <br>
+                   
+                    <br>
+                    <div>
+                        <button class="close-button">取消</button>
+                    </div>
+                </div>
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- 遮罩层和弹出框 -->
+<div class="modal-background"></div>
+
+
+<script>
+    // 获取链接和弹窗相关的元素
+    const popupLink = document.getElementById('popup-link');
+    const modalBackground = document.querySelector('.modal-background');
+    const modalBox = document.querySelector('.modal-box');
+    const closeButton = document.querySelector('.close-button');
+
+    // 点击链接时触发的函数
+    function handlePopup(event) {
+        event.preventDefault(); // 阻止默认跳转
+        modalBackground.style.display = 'block'; // 显示遮罩层
+        modalBox.style.display = 'block'; // 显示弹出框
+    }
+
+    // 点击关闭按钮时触发的函数
+    function handleClose() {
+        modalBackground.style.display = 'none'; // 隐藏遮罩层
+        modalBox.style.display = 'none'; // 隐藏弹出框
+    }
+
+    // 绑定事件处理函数
+    popupLink.addEventListener('click', handlePopup);
+    closeButton.addEventListener('click', handleClose);
+    // 给左侧按钮添加点击事件
+    var sidebarBtn = document.querySelector('.sidebar-btn');
+    var sidebar = document.querySelector('.sidebar');
+
+    sidebarBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // 监听文档的click事件，用于在点击页面其他区域时隐藏纵向导航条
+    document.addEventListener('click', function (e) {
+        if (!sidebar.contains(e.target) && !sidebarBtn.contains(e.target)) {
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+</script>
+</body>
+</html>

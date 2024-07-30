@@ -1,0 +1,574 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts 折线图示例</title>
+
+
+    <link href="../static/plugins/bootstrap-3.4.1/css/bootstrap.css" rel="stylesheet">
+    <!-- 必须在引入bootstarp.js之前引入 -->
+    <script src="../static/js/jquery-3.6.3.min.js"></script>
+
+    <script src="../static/plugins/bootstrap-3.4.1/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        /* 横向导航条样式 */
+        .navbar {
+            display: flex;
+            background-color: #134081;
+            color: #fff;
+            height: 60px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            border-radius: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        /* 点击按钮后显示纵向导航条 */
+        .sidebar-open .sidebar {
+            left: 0;
+        }
+
+        /* 左侧按钮样式 */
+        .sidebar-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #134081;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .sidebar-btn:before {
+
+        }
+
+        .sidebar-btn:after {
+
+        }
+
+        .sidebar-btn:hover:before,
+        .sidebar-btn:hover:after {
+            transform: scaleY(1.2);
+        }
+
+        /* 纵向导航条样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            padding: 20px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 10px 0;
+
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li a {
+            height: 70px;
+            width: 100%;
+
+        }
+
+        li a:hover {
+
+            background-color: #d3d3d3;
+        }
+
+        .notice {
+            margin: 20px auto;
+            width: 1200px;
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .notice h4 {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .notice p {
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .notice ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 10px;
+        }
+
+        .notice ul li:before {
+            content: "•";
+            color: #2a92c7;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .notice a {
+            color: #2a92c7;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .notice a:hover {
+            color: #f00;
+        }
+
+        /* 网页主体部分样式 */
+        .main {
+            margin: 0 auto;
+            padding: 20px;
+            width: 80%;
+            height: 600px;
+            background-color: #ffffff;
+        }
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 0 0;
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li {
+            list-style: none;
+            height: 60px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        div li {
+
+
+        }
+
+        div li a:hover {
+
+            background-color: #d3d3d3;
+        }
+body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .back {
+            background-color: white;
+        }
+
+        .container {
+            border: solid #5c5c9b 10px;
+            width: 100%;
+            height: 1000px;
+            z-index: -1;
+        }
+
+         /* 横向导航条样式 */
+        .navbar {
+            display: flex;
+            background-color: #134081;
+            color: #fff;
+            height: 60px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            border-radius: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        /* 点击按钮后显示纵向导航条 */
+        .sidebar-open .sidebar {
+            left: 0;
+        }
+
+        /* 左侧按钮样式 */
+        .sidebar-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #134081;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .sidebar-btn:before {
+
+        }
+
+        .sidebar-btn:after {
+
+        }
+
+        .sidebar-btn:hover:before,
+        .sidebar-btn:hover:after {
+            transform: scaleY(1.2);
+        }
+
+        /* 纵向导航条样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            padding: 20px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 10px 0;
+
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li a {
+            height: 60px;
+            width: 100%;
+
+        }
+
+        li a:hover {
+
+            background-color: #d3d3d3;
+        }
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        span button {
+            border: none;
+            width: 95px;
+            height: 30px;
+            margin-left: 13px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<!-- 横向导航条 -->
+<div class="navbar" style="">
+    <h2>
+        <button class="sidebar-btn"><span style="z-index: 9;color: white;" class="glyphicon glyphicon-th-list"
+                                          aria-hidden="true"></span></button>
+    </h2>
+    <h2 style="margin-right: 1100px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级考试管理系统</h2>
+    <nav>
+
+        <a href="/">注销</a>
+
+    </nav>
+
+</div>
+
+<!-- 纵向导航条 -->
+<div class="sidebar">
+    <br>
+    <br>
+    <br>
+    <div style="height: 220px;">
+
+        <h1><img style="width: 100px;margin-left: 45px;" src="{% static 'img/touxiang.png' %}"></h1>
+        <br>
+        <br>
+        <div>
+            用户名：&nbsp;{{ student.name }}
+
+        </div>
+        <br>
+        <div>
+            身份：&nbsp;{{ identity }}
+        </div>
+    </div>
+    <hr>
+    <ul>
+
+        <li><a href="/">主页</a></li>
+        <li><a href="/regist/">报名入口</a></li>
+        <li><a href="/searchStu/">查看报名</a></li>
+        <li><a href="/grade/">成绩查询</a></li>
+        <li><a href="/dataShow/">报考指导</a></li>
+        <li><a href="/stuinfo/">个人中心</a></li>
+    </ul>
+</div>
+<div class="notice" style="width: 1400px;">
+    <h4><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;&nbsp;成绩统计功能须知</h4>
+    <hr>
+
+
+    <p>本成绩统计模块提供学校内部学生各项考试成绩的平均分，仅供参考。</p>
+
+    <p>希望本模块能够为同学们提供相应的考试指导</p>
+
+</div>
+<div class="col-md-6 dialog table-bordered" style="margin-left: 50px;">
+    <!-- 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="width: 750px;height:650px;"></div>
+</div>
+
+<div class=" col-md-5 dialog table-bordered" style="background-color: white;margin-left: 30px;padding: 0;height:650px;">
+    <div class="ibox  ">
+        <div class="ibox-title">
+            <h5 style="font-weight: bold"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;&nbsp;考试指导
+            </h5>
+        </div>
+        <div class="ibox-content">
+
+            <div>
+                <p style="font-weight: bold">大学英语四/六级考试</p>
+                <p>大学英语四/六级考试是中国大学生英语水平的重要标准之一。</p>
+                <p>历年真题和模拟试题：可以在各大电商平台或图书馆中获取；</p>
+                <p>官网链接：<a href="http://cet.neea.edu.cn/" target="_blank">http://cet.neea.edu.cn/</a></p></div>
+            <hr>
+
+            <div>
+                <p style="font-weight: bold">计算机等级考试</p>
+
+                <p>计算机等级考试是由我国信息产业部所主管的全国性计算机技术水平考试</p>
+                <p>分为初、高、专业三个等级，是全国最具权威和参考价值的计算机考试之一</p>
+                <p>官网链接：<a href="http://ncre.neea.edu.cn/" target="_blank">http://ncre.neea.edu.cn/</a></p>
+            </div>
+            <hr>
+            <div>
+                <p style="font-weight: bold">日本语能力测试
+                </p>
+                <p>日本语能力测试是日本政府制定的用于评估日本语学习者听说读写能力的考试，分为5个等级。</p>
+
+                <p>官网链接：<a href="https://www.jlpt.jp/" target="_blank">https://www.jlpt.jp/</a></p>
+            </div>
+            <hr>
+            <div>
+                <p style="font-weight: bold">中小学教师资格考试
+                </p>
+                <p>中小学教师资格考试是由国家教育部主管的全国性考试，是评价中小学教师专业素养和职业水平的重要途径。</p>
+
+                <p>官网链接：<a href="http://www.ntce.cn/" target="_blank">http://www.ntce.cn/</a></p>
+            </div>
+
+
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+</div>
+<script type="text/javascript">
+     // 给左侧按钮添加点击事件
+    var sidebarBtn = document.querySelector('.sidebar-btn');
+    var sidebar = document.querySelector('.sidebar');
+
+    sidebarBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // 监听文档的click事件，用于在点击页面其他区域时隐藏纵向导航条
+    document.addEventListener('click', function (e) {
+        if (!sidebar.contains(e.target) && !sidebarBtn.contains(e.target)) {
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+
+
+    // 初始化 echarts 实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 配置项数据
+    var option = {
+        title: {
+            text: '全国大学生英语四六级近五年分数趋势',
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['四级', '六级']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['2017年', '2018年', '2019年', '2020年', '2021年']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} 分'
+            }
+        },
+        series: [
+            {
+                name: '四级',
+                type: 'line',
+                data: [518, 512, 509, 488, 473]
+            },
+            {
+                name: '六级',
+                type: 'line',
+                data: [493, 490, 474, 452, 438]
+            }
+        ]
+    }
+
+    // 使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+</body>
+</html>

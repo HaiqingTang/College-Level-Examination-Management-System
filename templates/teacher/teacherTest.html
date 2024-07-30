@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建考试场次</title>
+    <link href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.js' %}"></script>
+    <style>
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img style="width:200px;height: 40px;margin-top: 5px; " src="/static/img/logo.jpg">
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav col-md-8">
+                <li class=" col-md-2 active"><a href="/adminHomepage/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首页
+                    <span
+                            class="sr-only">(current)</span></a></li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考试批次&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li><a class="nav-link" data-toggle="" href="/newClass/">考试类</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/newBanch/">考试批次</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/newTest/">考试场次</a></li>
+
+                        <br>
+                    </ul>
+                </li>
+
+                <li class="col-md-2"><a href="/testStudent/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;学生信息
+                    <span
+                            class="sr-only"></span></a></li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考试批次&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li class="col-md-2"><a href="/batchTeacher/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;监考排考
+                    <span
+                            class="sr-only"></span></a></li>
+                        <li><a class="nav-link" data-toggle="" href="/watchTeacher/">查看监考</a></li>
+
+
+                        <br>
+                    </ul>
+                </li>
+                <li class="col-md-2"><a href="/batchTeacher/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;监考排考
+                    <span
+                            class="sr-only"></span></a></li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考试相关&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li><a class="nav-link" data-toggle="" href="/TestLine/">考试大纲</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/TestSoftware/">软件下载</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/TestPaper/">查看样卷</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/indexNews/">考试须知</a></li>
+                        <br>
+                    </ul>
+                </li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个人中心&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li><a class="nav-link" data-toggle="" href="/stuInfo/">我的信息</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/menuTest/">已报名考试</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/Grades/">成绩查询</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/retuQue/">问题反馈</a></li>
+                        <li role="separator" class="divider"></li>
+
+                    </ul>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right " style="margin-top: 10px;margin-right: 180px;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;当前用户&nbsp;&nbsp;<span
+                            class="caret"></span></button>
+                    <ul class="dropdown-menu">
+
+                        <li style="height: 25px;margin-left: 20px;"> 用户名：{{ student.name }}</li>
+
+                        <li><a href="/count/">充值</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/exit">退出</a></li>
+                    </ul>
+                </div>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+监考场次
+
+<div class="ibox">
+    <div class="ibox-title">
+
+    </div>
+    <div class="ibox-content">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>考次</th>
+                <th>考试类别</th>
+                <th>考试日期</th>
+                <th>考试教室</th>
+                <th>报名人数</th>
+                <th>最大人数</th>
+                <th>监考教师</th>
+                <th>操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for info in ret %}
+                <tr>
+                    <td>{{ info.kaoci }}</td>
+                    <td>{{ info.test_class }}</td>
+                    <td>{{ info.date }}</td>
+                    <td>{{ info.room }}</td>
+                    <td>{{ info.num }}</td>
+                    <td>{{ info.max_num }}</td>
+                    <td>{{ info.teacher }}</td>
+
+                    <td>
+                        <a>查看</a>&nbsp;&nbsp;<a>删除</a>
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+</body>
+</html>

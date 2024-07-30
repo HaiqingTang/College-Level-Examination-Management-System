@@ -1,0 +1,640 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建考试类别</title>
+    <link href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
+    <!-- 导入 SheetJS 库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.js' %}"></script>
+
+    <style>
+        .btn-link {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            border-radius: 0;
+
+        }
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .back {
+            background-color: white;
+        }
+
+        .container {
+            border: solid #5c5c9b 10px;
+            width: 100%;
+            height: 1000px;
+            z-index: -1;
+        }
+
+        /* 横向导航条样式 */
+        .navbar {
+            display: flex;
+            background-color: #134081;
+            color: #fff;
+            height: 60px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+            border-radius: 0;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+
+        /* 点击按钮后显示纵向导航条 */
+        .sidebar-open .sidebar {
+            left: 0;
+        }
+
+        /* 左侧按钮样式 */
+        .sidebar-btn {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            background-color: #134081;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .sidebar-btn:before {
+
+        }
+
+        .sidebar-btn:after {
+
+        }
+
+        .sidebar-btn:hover:before,
+        .sidebar-btn:hover:after {
+            transform: scaleY(1.2);
+        }
+
+        /* 纵向导航条样式 */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            padding: 20px;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .sidebar ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: #000;
+            text-decoration: none;
+            padding: 0 0;
+            font-size: 16px;
+        }
+
+        .sidebar li:last-child a {
+            border-bottom: none;
+        }
+
+        li {
+            list-style: none;
+            height: 60px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        div li {
+
+
+        }
+
+        div li a:hover {
+
+            background-color: #d3d3d3;
+        }
+
+
+        .ibox {
+            clear: both;
+            margin-bottom: 25px;
+            margin-top: 0;
+            padding: 0;
+        }
+
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 4px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+
+        .ibox-content {
+            background-color: #fff;
+            color: inherit;
+            padding: 15px 20px 20px;
+            border-color: #e7eaec;
+            -webkit-border-image: none;
+            -o-border-image: none;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 1px 0;
+        }
+
+        span button {
+            border: none;
+            width: 95px;
+            height: 30px;
+            margin-left: 13px;
+            margin-top: 10px;
+        }
+
+        span button {
+            border: none;
+            width: 95px;
+            height: 30px;
+            margin-left: 13px;
+            margin-top: 10px;
+        }
+
+        /* 蒙层样式 */
+        .modal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            display: none;
+        }
+
+        /* 弹出框样式 */
+        .modal-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 500px;
+            background-color: #fff;
+            border-radius: 2px;
+            padding: 20px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            z-index: 2;
+            display: none;
+
+        }
+
+        /* 关闭按钮样式 */
+        .close-button {
+            position: absolute;
+            bottom: 10px;
+            right: 50px;
+            width: 80px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        li {
+            list-style: none;
+            height: 57px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        li li {
+
+            height: 35px;
+
+        }
+
+        li ul li a:hover {
+
+            color: #4c4e52;
+
+        }
+
+        li a:hover {
+
+            color: #4c4e52;
+
+        }
+
+        .dropdown-menu {
+            border-radius: 0;
+            width: 230px;
+            height: 110px;
+            border: hidden;
+            box-shadow: none;
+            background-color: #f1f1f1;
+            left: -10px;
+            top: 33px;
+            transition: transform .3s ease-in-out;
+
+        }
+
+        li ul li a {
+            margin-left: 20px;
+            margin-top: 3px;
+        }
+
+        li {
+            transition: transform .3s ease-in-out;
+        }
+
+        li.active ~ li {
+            transform: translateY(90px);
+        }
+
+    </style>
+</head>
+<body>
+<!-- 横向导航条 -->
+<div class="navbar" style="">
+    <h2>
+        <button class="sidebar-btn"><span style="z-index: 9;color: white;" class="glyphicon glyphicon-th-list"
+                                          aria-hidden="true"></span></button>
+    </h2>
+    <h2 style="margin-right: 1140px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;等级考试管理系统</h2>
+    <nav>
+
+        <a href="/">注销</a>
+
+    </nav>
+
+</div>
+
+<!-- 纵向导航条 -->
+<div class="sidebar">
+    <br>
+    <br>
+    <br>
+    <div style="height: 210px;">
+        <br>
+        <h1><img style="width: 100px;margin-left: 45px;" src="{% static 'img/touxiang.png' %}"></h1>
+        <br>
+        <br>
+
+        <div>
+            身份：&nbsp;管理员
+        </div>
+    </div>
+    <hr>
+    <ul>
+
+        <li class="click-slide"><a href="/adminHomepage/">主页</a></li>
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                考试管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a class="" data-toggle="" href="/newClass/">考试类</a></li>
+                <li><a class="" data-toggle="" href="/newBanch/">考试批次</a></li>
+                <li><a class="" data-toggle="" href="/newTest/">考试信息</a></li>
+            </ul>
+        </li>
+
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                监考管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu " aria-labelledby="dropdownMenu1">
+                <li style="margin-top: 10px;"><a class="" data-toggle="" href="/allTeacher/">查看监考信息</a></li>
+                <br>
+                <li><a class="" data-toggle="" href="/batchTeacher/">分配场次</a></li>
+
+            </ul>
+
+        </li>
+        <li class="dropdown clearfix click-slide">
+            <p class="dropdown-toggle" type="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                学生管理
+                <span class="caret"></span>
+            </p>
+            <ul class="dropdown-menu">
+                <li style="margin-top: 10px;"><a class="" data-toggle="" href="/testStudent/">学生报名信息</a></li>
+                <br>
+                <li><a class="" data-toggle="" href="/allStudent/">学生信息</a></li>
+            </ul>
+        </li>
+        <li><a href="/upload/">数据批量导入</a></li>
+        <li><a href="/scoreManage/">成绩管理</a></li>
+        <li><a href="/gradeShow/">成绩统计</a></li>
+
+    </ul>
+    </ul>
+</div>
+
+<div style="margin:20px 20px 20px 20px;background-color: white;border-radius: 6px;width: 1500px;height: 600px;">
+    <br>
+    <br>
+    <br>
+    <div style="margin-left: 110px; ">
+        <select id="searchType" value="name" class="hidden">
+            <option value="name" >按考试类型查找</option>
+        </select>
+        <input style="margin-left: -10px;width: 230px;" id="searchInput" type="text">
+        &nbsp;&nbsp;<button onclick="search()" class="btn-primary">查找</button>
+    </div>
+
+    <div style="margin-left: 1120px;">
+        <button onclick="exportToExcel()" class="btn btn-primary" style=""><span class="glyphicon glyphicon-arrow-down"
+                                                                                 aria-hidden="true"></span>&nbsp;&nbsp;导出为EXCEL
+        </button>
+        <a class="btn btn-primary" href="" id="popup-link" style="margin-left: 10px;"><span
+                class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;新建类型</a>
+
+    </div>
+    <br>
+    <div class="ibox table-bordered" style="width: 1300px;margin-left: 90px;">
+        <div class="ibox-title">
+            考试类别
+        </div>
+        <div class="ibox-content">
+            <table class="table table-striped" id="datatable">
+
+                <thead>
+                <tr>
+                    <th><label for="exampleInputEmail1">考试id：</label></th>
+                    <th>考试类型</th>
+                    <th>操作</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for c1 in allclasses %}
+                    <form method="post" action="/newClass/" name="delete">
+                        <tr>
+
+                            <th><h5>{{ c1.id }}</h5></th>
+                            <td>{{ c1.name }}</td>
+                            <textarea class="hidden" name="cid">{{ c1.id }}</textarea>
+                            <td>
+                                <button class="btn-link" type="submit" name="delete">删除</button>
+                            </td>
+
+                        </tr>
+                    </form>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-box">
+    <h5>新建考试类型</h5>
+    <hr>
+    <div>
+
+        <br>
+        <div style="padding: 60px;">
+            <form action="/newClass/" method="post" name="new">
+                <label for="exampleInputEmail1">考试类型：</label>
+                <input class="form-control" type="text" name="classes"/>
+                <br>
+                <br>
+                <br>
+                <br>
+                <button style="margin-left:230px; " type="submit" name="new" class="btn-primary">提交</button>
+
+            </form>
+        </div>
+
+    </div>
+    <br>
+<br>
+    <br>
+    <br>
+
+    <br>
+    <div>
+        <hr>
+        <button class="close-button">取消</button>
+    </div>
+</div>
+
+<!-- 遮罩层和弹出框 -->
+<div class="modal-background"></div>
+
+<script>
+    $('li p').on('click', function () {
+        // 首先将当前元素所在的 li 的兄弟元素中的 active 类清除
+        $(this).parent().siblings().removeClass('active');
+        // 给当前元素所在的 li 添加 active 类
+        $(this).parent().toggleClass('active');
+    });
+
+    function exportToExcel() {
+        // 获取表格数据
+        // 获取选择的数据库
+
+        var table = document.getElementById('datatable');
+
+        var sheetName = "Sheet1";
+        var tableRows = table.getElementsByTagName('tr');
+        var tableHeaders = tableRows[0].getElementsByTagName('th');
+        var data = [];
+        data.push([]);
+        for (var j = 0; j < tableHeaders.length; j++) {
+            data[0].push(tableHeaders[j].innerHTML);
+        }
+        for (var i = 1; i < tableRows.length; i++) {
+            var tableCells = tableRows[i].getElementsByTagName('td');
+            var rowData = [];
+            for (var j = 0; j < tableCells.length; j++) {
+                rowData.push(tableCells[j].innerHTML);
+            }
+            data.push(rowData);
+        }
+        // 将数据导出为Excel文件
+        var workbook = XLSX.utils.book_new();
+        var worksheet = XLSX.utils.aoa_to_sheet(data);
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+        var excelFilename = 'my-table.xlsx';
+        var workbookOut = XLSX.write(workbook, {bookType: 'xlsx', type: 'binary'});
+
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        var blob = new Blob([s2ab(workbookOut)], {type: "application/octet-stream"});
+        if (window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveBlob(blob, excelFilename);
+        } else {
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = url;
+            a.download = excelFilename;
+            a.click();
+            setTimeout(function () {
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
+    // 获取链接和弹窗相关的元素
+    const popupLink = document.getElementById('popup-link');
+    const modalBackground = document.querySelector('.modal-background');
+    const modalBox = document.querySelector('.modal-box');
+    const closeButton = document.querySelector('.close-button');
+
+    // 点击链接时触发的函数
+    function handlePopup(event) {
+        event.preventDefault(); // 阻止默认跳转
+        modalBackground.style.display = 'block'; // 显示遮罩层
+        modalBox.style.display = 'block'; // 显示弹出框
+    }
+
+    // 点击关闭按钮时触发的函数
+    function handleClose() {
+        modalBackground.style.display = 'none'; // 隐藏遮罩层
+        modalBox.style.display = 'none'; // 隐藏弹出框
+    }
+
+    // 绑定事件处理函数
+    popupLink.addEventListener('click', handlePopup);
+    closeButton.addEventListener('click', handleClose);
+    // 给左侧按钮添加点击事件
+    var sidebarBtn = document.querySelector('.sidebar-btn');
+    var sidebar = document.querySelector('.sidebar');
+
+    sidebarBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // 监听文档的click事件，用于在点击页面其他区域时隐藏纵向导航条
+    document.addEventListener('click', function (e) {
+        if (!sidebar.contains(e.target) && !sidebarBtn.contains(e.target)) {
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+
+
+    function search() {
+        // 获取用户输入的查找内容和搜索类别
+        var inputValue = document.getElementById("searchInput").value.toLowerCase();
+        var searchType = document.getElementById("searchType").value;
+
+        // 获取当前显示的表格
+        currentTable = document.getElementById("datatable");
+
+
+        // 遍历表格，匹配用户输入的查找内容并显示匹配结果
+        var rows = currentTable.getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var foundMatch = false;
+            for (var j = 0; j < cells.length; j++) {
+                var cellText = cells[j].innerText.toLowerCase();
+                if ((searchType === "name" && cellText.toLowerCase() === inputValue)) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+
+            if (foundMatch) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+            rows[0].style.display = "";
+        }
+    }
+</script>
+</body>
+</html>

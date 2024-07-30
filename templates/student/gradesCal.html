@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts 柱状图示例</title>
+    <!-- 引入 ECharts -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.2/echarts.min.js"></script>
+    <link href="../static/plugins/bootstrap-3.4.1/css/bootstrap.css" rel="stylesheet">
+    <!-- 必须在引入bootstarp.js之前引入 -->
+    <script src="../static/js/jquery-3.6.3.min.js"></script>
+
+    <script src="../static/plugins/bootstrap-3.4.1/js/bootstrap.js"></script>
+    <style>
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img style="width:200px;height: 40px;margin-top: 5px; " src="/static/img/logo.jpg">
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav col-md-8">
+                <li class=" col-md-2 active"><a href="/studentLogin/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首页
+                    <span
+                            class="sr-only">(current)</span></a></li>
+                <li class="col-md-2"><a href='/chooseWay'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;报名</a></li>
+
+                <li class="col-md-2"><a href="/showGrades/">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成绩统计
+                    <span
+                            class="sr-only"></span></a></li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考试相关&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li><a class="nav-link" data-toggle="" href="/TestLine/">考试大纲</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/TestSoftware/">软件下载</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/TestPaper/">查看样卷</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/indexNews/">考试须知</a></li>
+                        <br>
+                    </ul>
+                </li>
+                <li class="dropdown col-md-2" style="margin-left: 30px;">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个人中心&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu" role="tablist">
+                        <li><a class="nav-link" data-toggle="" href="/stuInfo/">我的信息</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/menuTest/">已报名考试</a></li>
+                        <li><a class="nav-link" data-toggle="" href="/Grades/">成绩查询</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/retuQue/">问题反馈</a></li>
+                        <li role="separator" class="divider"></li>
+
+                    </ul>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right " style="margin-top: 10px;margin-right: 180px;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;当前用户&nbsp;&nbsp;<span
+                            class="caret"></span></button>
+                    <ul class="dropdown-menu">
+
+                        <li style="height: 25px;margin-left: 20px;"> 用户名：{{ student.name }}</li>
+
+                        <li><a href="/count/">充值</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/exit">退出</a></li>
+                    </ul>
+                </div>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div class="col-md-5 dialog table-bordered" style="margin-left: 90px;">
+    <div id="chart" style="height: 610px;width:600px;"></div>
+
+    <form class="hidden">
+        <label for="a1">a1:</label>
+        <input type="number" id="a1" name="a1" value="{{ ave1 }}"><br>
+
+        <label for="a2">a2:</label>
+        <input type="number" id="a2" name="a2" value="{{ ave2 }}"><br>
+
+        <label for="a3">a3:</label>
+        <input type="number" id="a3" name="a3" value="{{ ave3 }}"><br>
+
+        <label for="a4">a4:</label>
+        <input type="number" id="a4" name="a4" value="{{ ave4 }}"><br>
+
+        <button type="button" onclick="updateChart()">Update</button>
+    </form>
+</div>
+
+<div class="col-md-5 dialog table-bordered" style="margin-left: 30px;">
+
+    <div id="chart1" style="height: 550px;width: 600px;"></div>
+    <form>
+        <div class="col-sm-4" style="margin-left: 300px;">
+            <label for="subject">选择科目：</label>
+            <select id="subject" name="subject" class="">
+                <option value="math" data-data='{"labels":["WPS Office应用", "网络安全素质教育", "Photoshop应用"], "classA":[80, 90, 75]}'>计算机一级
+                </option>
+                <option value="english" data-data='{"labels":["C语言程序设计", "Python语言程序设计", "MySQL数据程序设计"], "classA":[88, 70, 75]}'>计算机二级
+                </option>
+                <option value="chinese"
+                        data-data='{"labels":["网络技术", "数据库技术", "信息安全技术"], "classA":[87,83, 75]}'>
+                    计算机三级
+                </option>
+                <option value="physics" data-data='{"labels":["网络工程师", "信息安全工程师", "嵌入式系统开发工程师"], "classA":[80, 56, 75]}'>计算机四级
+                </option>
+            </select><br>
+        </div>
+        <div class="col-sm-2">
+            <div class="hidden">
+                <label for="class">选择班级：</label>
+                <select id="class" name="class">
+                    <option value="A">A班</option>
+                    <option value="B">B班</option>
+                    <option value="C">C班</option>
+                </select><br>
+            </div>
+            <button style="width: 60px;height: 23px;" class="btn-primary" type="button" onclick="updateChart1()">查看</button>
+        </div>
+    </form>
+<br>
+    <br>
+    <br>
+</div>
+
+<script>
+    // 初始化 ECharts 实例
+    var myChart = echarts.init(document.getElementById('chart'));
+
+    // 初始数据
+    var data = [0, 0, 0, 0];
+
+    // 更新数据函数
+    function updateData(updatedData) {
+        data[0] = updatedData[0];
+        data[1] = updatedData[1];
+        data[2] = updatedData[2];
+        data[3] = updatedData[3];
+    }
+
+    // 更新图表函数
+    function updateChart() {
+        var updatedData = [
+            parseInt(document.getElementById('a1').value),
+            parseInt(document.getElementById('a2').value),
+            parseInt(document.getElementById('a3').value),
+            parseInt(document.getElementById('a4').value)
+        ];
+
+        updateData(updatedData);
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption({
+            xAxis: {
+                type: 'category',
+                data: ['计算机一级', '计算机二级', '计算机三级', '计算机四级']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: data,
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        // 每个柱子的颜色分别指定
+                        color: function (params) {
+                            var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265'];
+                            return colorList[params.dataIndex];
+                        }
+                    }
+                },
+            }]
+        });
+    }
+
+
+    // 初始化 ECharts 实例
+    var myChart1 = echarts.init(document.getElementById('chart1'));
+
+    // 初始数据
+    var mathData = JSON.parse(document.querySelector('[value="math"]').dataset.data);
+    var englishData = JSON.parse(document.querySelector('[value="english"]').dataset.data);
+    var chineseData = JSON.parse(document.querySelector('[value="chinese"]').dataset.data);
+    var physicsData = JSON.parse(document.querySelector('[value="physics"]').dataset.data);
+
+    // 更新数据函数
+    function updateData1() {
+        var chartData;
+        var subject = document.getElementById('subject').value;
+        var className = document.getElementById('class').value;
+
+        // 根据下拉框选择更新数据
+        if (subject == 'math') {
+            chartData = mathData;
+        } else if (subject == 'english') {
+            chartData = englishData;
+        } else if (subject == 'chinese') {
+            chartData = chineseData;
+        } else {  // 'physics'
+            chartData = physicsData;
+        }
+
+        // 根据班级调整数据
+        switch (className) {
+            case 'B':
+                chartData['classA'][0] += 5;
+                break;
+            case 'C':
+                chartData['classA'][1] += 3;
+                chartData['classA'][2] += 2;
+                break;
+            default:
+                break;
+        }
+        return chartData;
+    }
+
+    // 更新图表函数
+    function updateChart1() {
+        var chartData = updateData1();
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart1.setOption({
+            xAxis: {
+                type: 'category',
+                data: chartData['labels']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: chartData['classA'],
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        // 每个柱子的颜色分别指定
+                        color: function (params) {
+                            var colorList = ['#82c93f', '#5190bb', '#e8a557', '#b588e0'];
+                            return colorList[params.dataIndex];
+                        }
+                    }
+                },
+            }]
+        });
+    }
+
+    // 页面加载完成时自动更新图表
+    window.onload = function () {
+        updateChart();
+        updateChart1();
+    };
+</script>
+</body>
+</html>
